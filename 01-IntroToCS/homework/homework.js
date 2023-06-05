@@ -10,7 +10,7 @@ function BinarioADecimal(num) {
 
 function DecimalABinario(num) {
   let binary = new Array()
-  while (num > 1){
+  while (num > 1) {
       binary.push(num % 2)
       num = Math.floor(num / 2)
   }

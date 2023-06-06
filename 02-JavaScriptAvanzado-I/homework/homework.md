@@ -7,69 +7,69 @@ Determiná que será impreso en la consola, sin ejecutar el código.
 > Investiga cuál es la diferencia entre declarar una variable con `var` y directamente asignarle un valor.
 
 ```javascript
-x = 1;
-var a = 5;
-var b = 10;
-var c = function (a, b, c) {
-   var x = 10;
-   console.log(x);
-   console.log(a);
-   var f = function (a, b, c) {
-      b = a;
-      console.log(b);
-      b = c;
-      var x = 5;
+x = 1;                           // Las variables declaradas se limitan al contexto de ejecución en el cual son declaradas.
+var a = 5;                       // Las variables no declaradas siempre son globales.
+var b = 10; 
+var c = function (a, b, c) {     // (8, 9, 10)
+   var x = 10;                   
+   console.log(x);               
+   console.log(a);               
+   var f = function (a, b, c) {  // (8, 9, 10)
+      b = a;                     
+      console.log(b);            
+      b = c;                     
+      var x = 5;                 
    };
-   f(a, b, c);
-   console.log(b);
+   f(a, b, c);                   
+   console.log(b);               
 };
-c(8, 9, 10);
-console.log(b);
-console.log(x);
+c(8, 9, 10);                     // --> 10 --> 8 --> 8 --> 9
+console.log(b);                  // --> 10
+console.log(x);                  // --> 1
 ```
 
 ```javascript
-console.log(bar);
-console.log(baz);
-foo();
+console.log(bar);                // --> undefined
+console.log(baz);                // --> ReferenceError: baz is not defined
+foo();                           
 function foo() {
    console.log('Hola!');
 }
-var bar = 1;
-baz = 2;
+var bar = 1;                     // Hoisting define "bar" pero no le asigna valor
+baz = 2;                         // Hoisting no hace nada porque es una instrucción netamente de asignación
 ```
 
 ```javascript
 var instructor = 'Tony';
-if (true) {
-   var instructor = 'Franco';
+if (true) {                      // Se ejecuta if, porque el valor es true
+   var instructor = 'Franco';    // la variable "instructor" se pisa con el valor 'Franco'
 }
-console.log(instructor);
+console.log(instructor);         // --> 'Franco'
 ```
 
 ```javascript
 var instructor = 'Tony';
-console.log(instructor);
-(function () {
+console.log(instructor);         // --> 'Tony'
+(function () {                   // IIFE (Immediately Invoked Function Expression).
    if (true) {
-      var instructor = 'Franco';
-      console.log(instructor);
+      var instructor = 'Franco'; // Se crea una variable "instructor" dentro del entorno de la función.
+      console.log(instructor);   // --> 'Franco'         (NO modifica la variable global "instructor")
    }
 })();
-console.log(instructor);
+console.log(instructor);         // --> 'Tony'
 ```
 
 ```javascript
-var instructor = 'Tony';
-let pm = 'Franco';
+var instructor = 'Tony';         // --> var: declara una variable con un scope global, mientras que;
+let pm = 'Franco';               // --> let: limita el scope al bloque o expresión donde se está utilizando.
 if (true) {
-   var instructor = 'The Flash';
-   let pm = 'Reverse Flash';
-   console.log(instructor);
-   console.log(pm);
+   var instructor = 'The Flash'; // Variable global "instructor" se pisa.
+   let pm = 'Reverse Flash';     // Se crea una variable dentro del entorno de la estructura de control.
+   console.log(instructor);      // --> 'The Flash'
+   console.log(pm);              // --> 'Reverse Flash'
 }
-console.log(instructor);
-console.log(pm);
+console.log(instructor);         // --> 'The Flash'
+console.log(pm);                 // --> 'Franco'
 ```
 
 ### Coerción de Datos
@@ -77,21 +77,21 @@ console.log(pm);
 ¿Cuál crees que será el resultado de la ejecución de estas operaciones?:
 
 ```javascript
-6 / "3"
-"2" * "3"
-4 + 5 + "px"
-"$" + 4 + 5
-"4" - 2
-"4px" - 2
-7 / 0
-{}[0]
-parseInt("09")
-5 && 2
-2 && 5
-5 || 0
-0 || 5
+6 / "3"           // 2
+"2" * "3"         // 6
+4 + 5 + "px"      // "9px"
+"$" + 4 + 5       // "$45"
+"4" - 2           // 2
+"4px" - 2         // NaN - En JavaScript, NaN es un numero que no es legal.
+7 / 0             // Infinity
+{}[0]             // undefined
+parseInt("09")    // 9
+5 && 2            // 2
+2 && 5            // 5
+5 || 0            // 5
+0 || 5            // 5 - Primer valor da falso, entonces retorna el segundo.
 [3]+[3]-[10]
-3>2>1
+3>2>1             // false - 3 > 2 --> (true) / true > 1 --> (false) porque true == 1
 [] == ![]
 ```
 
@@ -103,8 +103,8 @@ parseInt("09")
 
 ```javascript
 function test() {
-   console.log(a);
-   console.log(foo());
+   console.log(a);      // --> undefined  - Porque Hoisting crea la variable a, pero nunca le asigna valor.
+   console.log(foo());  // --> 2          - Porque foo() retorna el valor numerico 2.
 
    var a = 1;
    function foo() {
@@ -118,15 +118,15 @@ test();
 Y el de este código? :
 
 ```javascript
-var snack = 'Meow Mix';
+var snack = 'Meow Mix';          // getFood(false) no devuelve nada porque:
 
-function getFood(food) {
-   if (food) {
+function getFood(food) {         // (food: false)
+   if (food) {                   // if (food: false == true) --> false, if no se ejecuta.
       var snack = 'Friskies';
       return snack;
    }
-   return snack;
-}
+   return snack;                 // la variable snack no está declarada;
+}                                // return no devuelve ningun valor.
 
 getFood(false);
 ```
@@ -136,7 +136,7 @@ getFood(false);
 ¿Cuál es el output o salida en consola luego de ejecutar esté código? Explicar por qué:
 
 ```javascript
-var fullname = 'Juan Perez';
+var fullname = 'Juan Perez';           // ?
 var obj = {
    fullname: 'Natalia Nerea',
    prop: {
@@ -147,11 +147,11 @@ var obj = {
    },
 };
 
-console.log(obj.prop.getFullname());
+console.log(obj.prop.getFullname());   // 'Aurelio De Rosa'
 
 var test = obj.prop.getFullname;
 
-console.log(test());
+console.log(test());                   // undefined
 ```
 
 ### Event loop
@@ -160,17 +160,17 @@ Considerando el siguiente código, ¿Cuál sería el orden en el que se muestra 
 
 ```javascript
 function printing() {
-   console.log(1);
+   console.log(1);            // (1) se ejecuta automaticamente.
    setTimeout(function () {
-      console.log(2);
+      console.log(2);         // (4) sale ultimo de la web api, luego del tercer console log.
    }, 1000);
    setTimeout(function () {
-      console.log(3);
+      console.log(3);         // (3) sale primero de la web api.
    }, 0);
-   console.log(4);
+   console.log(4);            // (2) se ejecuta automaticamente luego del primer console log.
 }
 
-printing();
+printing();                   // --> 1 --> 4 --> 3 --> 2
 ```
 
 </br >

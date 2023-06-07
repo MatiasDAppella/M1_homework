@@ -14,9 +14,12 @@
 // nuevoContador()     //                       2otroContador()      // 2
 
 function counter() {
-    let num = 1
+    // Creamos una variable cont;
+    let cont = 1
+
+    // la cual se irá incrementando con cada ejecución
     return function(){
-        return num++
+        return cont++
     }
 }
 
@@ -47,11 +50,19 @@ function counter() {
 //                              y lo retornará (tip: si usaste un objeto, podés usar hasOwnProperty)
 
 function cacheFunction(cb) {
+    // Creamos el objeto (que nos recomiendan crear en el enunciado);
+    // este nos servirá para ir almacenando los valores de las operaciones
     let memory = new Object()
 
-    return function(arg){
-        if (!memory.hasOwnProperty(arg)) memory[arg] = cb(arg)
-        return memory[arg]
+    return function(argumento){
+        // Cuando ejecutamos la función, primero evaluamos si YA EXISTE la propiedad en nuestro objeto;
+
+        // si NO EXISTE significa que será la primera vez que ejecutemos nuestro 'cb' con el 'argumento' ingresado,
+        // entonces lo creamos en nuestro objeto 'memory'
+        if (!memory.hasOwnProperty(argumento)) memory[argumento] = cb(argumento)
+
+        // Como nuestro argumento ahora EXISTE, ya sea por creación o por lectura, lo retornamos
+        return memory[argumento]
     }
 }
 
@@ -79,7 +90,10 @@ function getNombre() {
 // Usando el método bind() guardar, en las dos variables declaradas a continuación, dos funciones que actúen como getNombre
 // pero retornen el nombre del instructor y del alumno, respectivamente.
 
+// Solo bindeo la función getNombre para que el this que contiene, haga referencia al objeto instructor:
 let getNombreInstructor = getNombre.bind(instructor);
+
+// Solo bindeo la función getNombre para que el this que contiene, haga referencia al objeto alumno:
 let getNombreAlumno = getNombre.bind(alumno);
 
 
@@ -89,10 +103,15 @@ let getNombreAlumno = getNombre.bind(alumno);
 // tres funciones que retornen una cadena (string) y el delimitador especificado (asteriscos, guiones, y guiones bajos, respectivamente).
 // Las funciones obtenidas deberían recibir solamente un argumento - la cadena de texto - ya que los otros argumentos habrán sido "bindeados". 
 
+//                             a                   b              c
 function crearCadena(delimitadorIzquierda, delimitadorDerecha, cadena) {
     return delimitadorIzquierda + cadena + delimitadorDerecha;
-}
+} //                a                c             b
 
+// Utilizamos la propiedad .bind() pero esta vez, no nesecitamos referenciar ningun objeto externo,
+// solo fijar los valores del primer y segundo parametro de nuestra función 'crearCadena'
+
+//                                     bind   a    b
 let textoAsteriscos = crearCadena.bind(null, '*', '*');
 let textoGuiones = crearCadena.bind(null, '-', '-');
 let textoUnderscore = crearCadena.bind(null, '_', '_');

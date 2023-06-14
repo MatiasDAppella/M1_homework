@@ -20,11 +20,14 @@ function bubbleSort(array) {
     // Devolver el array ordenado resultante
     // Tu código:
 
-    for (let lng = array.length; lng > 0; lng--){
+    let changes = true
+    for (let lng = array.length; (lng > 1 && changes); lng--){
+        changes = false
         for (let i = 1; i < lng; i++){
             let prev = array[i - 1]
 
             if (prev > array[i]){
+                changes = true
                 array[i - 1] = array[i]
                 array[i] = prev
             }
